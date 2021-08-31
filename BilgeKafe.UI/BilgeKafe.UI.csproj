@@ -86,6 +86,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="SiparisForm.resx">
       <DependentUpon>SiparisForm.cs</DependentUpon>
@@ -105,6 +106,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dolu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bos.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BilgeKafe.Data\BilgeKafe.Data.csproj">
+      <Project>{4cc09069-e1a9-470a-a4c8-2b8b67b53267}</Project>
+      <Name>BilgeKafe.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

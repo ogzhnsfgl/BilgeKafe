@@ -83,10 +83,20 @@ namespace BilgeKafe.UI
             // 
             this.nudAdet.Font = new System.Drawing.Font("Open Sans", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.nudAdet.Location = new System.Drawing.Point(228, 36);
+            this.nudAdet.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.nudAdet.MinimumSize = new System.Drawing.Size(100, 0);
             this.nudAdet.Name = "nudAdet";
             this.nudAdet.Size = new System.Drawing.Size(100, 29);
             this.nudAdet.TabIndex = 3;
+            this.nudAdet.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // btnDetayEkle
             // 
@@ -97,6 +107,7 @@ namespace BilgeKafe.UI
             this.btnDetayEkle.TabIndex = 4;
             this.btnDetayEkle.Text = "Ekle";
             this.btnDetayEkle.UseVisualStyleBackColor = true;
+            this.btnDetayEkle.Click += new System.EventHandler(this.btnDetayEkle_Click);
             // 
             // label3
             // 
@@ -138,6 +149,8 @@ namespace BilgeKafe.UI
             this.dgwSiparisDetayları.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgwSiparisDetayları.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgwSiparisDetayları.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgwSiparisDetayları.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgwSiparisDetayları.Location = new System.Drawing.Point(13, 74);
             this.dgwSiparisDetayları.Name = "dgwSiparisDetayları";
@@ -242,7 +255,7 @@ namespace BilgeKafe.UI
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cboUrun);
             this.Controls.Add(this.label1);
-            this.MinimumSize = new System.Drawing.Size(750, 0);
+            this.MinimumSize = new System.Drawing.Size(750, 39);
             this.Name = "SiparisForm";
             this.Text = "Masa 03";
             ((System.ComponentModel.ISupportInitialize)(this.nudAdet)).EndInit();
