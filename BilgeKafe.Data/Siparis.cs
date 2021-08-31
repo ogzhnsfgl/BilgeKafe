@@ -10,7 +10,7 @@ namespace BilgeKafe.Data
     { 
         public int MasaNo { get; set; }
 
-        public SiparisDurum Durum { get; set; }
+        public SiparisDurum Durum { get; set; } = SiparisDurum.Aktif;
 
         public decimal OdenenTutar { get; set; }
         //DateTime'ları nullable yaptık (?) ile.
@@ -19,7 +19,7 @@ namespace BilgeKafe.Data
         // 2. Yöntem constructor içinde ayarlamak.
         public DateTime? AcilisZamani { get; set; } =DateTime.Now;
         public DateTime? KapanisZamani { get; set; }
-        public List<SiparisDetay> SiparisDetaylar { get; set; }
+        public List<SiparisDetay> SiparisDetaylar { get; set; } = new List<SiparisDetay>();
         public string ToplamTutarTL => $"{ToplamTutarTL}₺";
 
         public decimal ToplamTutar()
