@@ -18,11 +18,10 @@ namespace BilgeKafe.UI
         public GecmisSiparislerForm(KafeVeri db)
         {
             this.db = db;
-
+            
             InitializeComponent();
             dgwSiparisDetaylar.AutoGenerateColumns = false;
             dgwSiparisler.AutoGenerateColumns = false;
-           
             dgwSiparisler.DataSource = db.GecmisSiparisler;
             
         }
