@@ -23,10 +23,25 @@ namespace BilgeKafe.UI
             this.siparis = siparis;
             //Binding listi siparis detay listesine bağladık 
             blSiparisDetay = new BindingList<SiparisDetay>(siparis.SiparisDetaylar);
+            blSiparisDetay.ListChanged += BlSiparisDetay_ListChanged;
             InitializeComponent();
+            //Otomatik sütun oluşturmayı kapat:
+            dgwSiparisDetayları.AutoGenerateColumns = false;
+            dgwSiparisDetayları.DataSource = blSiparisDetay;
             UrunleriListele();
             MasaNoyuGuncelle();
-            dgwSiparisDetayları.DataSource = blSiparisDetay;
+            OdemeTutariniGuncelle();
+        }
+
+        //Binding list'te her değişikli kolduğunda odemetutarını güncelleyecek!
+        private void BlSiparisDetay_ListChanged(object sender, ListChangedEventArgs e)
+        {
+            OdemeTutariniGuncelle();
+        }
+
+        private void OdemeTutariniGuncelle()
+        {
+            lblOdemeTutari.Text = siparis.ToplamTutarTL;
         }
 
         private void UrunleriListele()
@@ -59,10 +74,51 @@ namespace BilgeKafe.UI
             };
             //bl'ye eklemek hem sipariş detay listesine hem dgw ye ekleyecek!
             blSiparisDetay.Add(sd);
-
-            //todo: Ödeme tutarı güncellenecek!
-
+            //Ödeme tutarı güncellenecek binding list event'ına atadık.
+            
         }
 
+        private void btnAnasayfa_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void btnOdemAl_Click(object sender, EventArgs e)
+        {
+            DialogResult dr= MessageBox.Show($"{lblOdemeTutari.Text} tutarında ödeme alındı. Onaylıyor musunuz?" ,"Ödeme Onayı",MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button1);
+
+            switch (dr)
+            {
+                case DialogResult.Yes:
+                    SiparisiKapat(SiparisDurum.Odendi);
+                    break;
+                case DialogResult.No:
+                    break;
+            }
+        }
+
+        private void btnSiparisIptal_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show($"Sipariş iptal edilecektir. Onaylıyor musunuz?", "İptal Onayı", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
+
+            switch (dr)
+            {
+                case DialogResult.Yes:
+                    SiparisiKapat(SiparisDurum.Iptal);
+                    break;
+                case DialogResult.No:
+                    break;
+            }
+        }
+
+        private void SiparisiKapat(SiparisDurum durum)
+        {
+            siparis.OdenenTutar = durum == SiparisDurum.Odendi ? siparis.ToplamTutar() : 0;
+            siparis.Durum = durum;
+            siparis.KapanisZamani = DateTime.Now;
+            db.AktifSiparisler.Remove(siparis);
+            db.GecmisSiparisler.Add(siparis);
+            Close();
+        }
     }
 }

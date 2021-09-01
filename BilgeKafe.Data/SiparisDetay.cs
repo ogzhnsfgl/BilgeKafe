@@ -13,7 +13,7 @@ namespace BilgeKafe.Data
         public  int Adet { get; set; }
 
         //Get Tutar return edecek.
-        public string TutarTL => $"{Tutar()}₺";
+        public string TutarTL => $"{Tutar()} ₺";
 
         public decimal Tutar()
         {

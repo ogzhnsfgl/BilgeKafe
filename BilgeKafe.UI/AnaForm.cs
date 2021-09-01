@@ -50,18 +50,17 @@ namespace BilgeKafe.UI
 
         private void lvwMasalar_DoubleClick(object sender, EventArgs e)
         {
-            //Seçili lvi'yi bir lvi'ye ata.Sonra onun tagini masaNo'ya aktar.
+            // Seçili lvi'yi bir lvi'ye ata.Sonra onun tagini masaNo'ya aktar.
             ListViewItem lvi = lvwMasalar.SelectedItems[0];
             int masaNo = (int) lvi.Tag;
             lvi.ImageKey = "dolu";
 
             // Tıklanan masaya ait varsa siparişi bul
-
-            //Aktif sipariş var mı kontrol ettik eğer yoksa null dönecek.
+            // Aktif sipariş var mı kontrol ettik eğer yoksa null dönecek.
 
             Siparis siparis= db.AktifSiparisler.FirstOrDefault(x => x.MasaNo == masaNo);
 
-            //Eğer sipariş henüz oluşturulmadıysa yani masa kapalıysa yeni sipariş oluştur
+            // Eğer sipariş henüz oluşturulmadıysa yani masa kapalıysa yeni sipariş oluştur
 
             if (siparis==null)
             {
@@ -69,11 +68,23 @@ namespace BilgeKafe.UI
                     { MasaNo = masaNo };
                 db.AktifSiparisler.Add(siparis);
             }
-            
             SiparisForm formSiparis = new SiparisForm(db, siparis);
+            
+            //Sipariş formunu açtık
             formSiparis.ShowDialog();
 
+            //Sipariş formu kapanırken durumu kontrol ediyoruz aktif değilse yani ödeme alındıysa
+            // yada iptal edildiyse imageKey'i boşa çekiyoruz.
 
+            if (siparis.Durum!=SiparisDurum.Aktif)
+            {
+                lvi.ImageKey = "bos";
+            }
+        }
+
+        private void tsmiGecmisSiparisler_Click(object sender, EventArgs e)
+        {
+            new GecmisSiparislerForm(db).ShowDialog();
         }
     }
 }

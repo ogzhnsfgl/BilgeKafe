@@ -20,7 +20,7 @@ namespace BilgeKafe.Data
         public DateTime? AcilisZamani { get; set; } =DateTime.Now;
         public DateTime? KapanisZamani { get; set; }
         public List<SiparisDetay> SiparisDetaylar { get; set; } = new List<SiparisDetay>();
-        public string ToplamTutarTL => $"{ToplamTutarTL}₺";
+        public string ToplamTutarTL => $"{ToplamTutar():N2} ₺";
 
         public decimal ToplamTutar()
         {
