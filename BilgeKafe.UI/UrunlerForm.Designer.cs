@@ -33,10 +33,10 @@ namespace BilgeKafe.UI
             this.label1 = new System.Windows.Forms.Label();
             this.btnUrunEkle = new System.Windows.Forms.Button();
             this.dgwUrunler = new System.Windows.Forms.DataGridView();
-            this.nudBirimFiyat = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nudBirimFiyat = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
             this.btnDuzenle = new System.Windows.Forms.Button();
             this.btnIptal = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgwUrunler)).BeginInit();
@@ -94,6 +94,20 @@ namespace BilgeKafe.UI
             this.dgwUrunler.TabIndex = 3;
             this.dgwUrunler.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dgwUrunler_UserDeletingRow);
             // 
+            // Column1
+            // 
+            this.Column1.DataPropertyName = "UrunAd";
+            this.Column1.HeaderText = "Ürün Adı";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            // 
+            // Column2
+            // 
+            this.Column2.DataPropertyName = "BirimFiyat";
+            this.Column2.HeaderText = "Birim Fiyatı";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            // 
             // nudBirimFiyat
             // 
             this.nudBirimFiyat.DecimalPlaces = 2;
@@ -117,20 +131,6 @@ namespace BilgeKafe.UI
             this.label2.Size = new System.Drawing.Size(98, 20);
             this.label2.TabIndex = 5;
             this.label2.Text = "Birim Fiyatı";
-            // 
-            // Column1
-            // 
-            this.Column1.DataPropertyName = "UrunAd";
-            this.Column1.HeaderText = "Ürün Adı";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            // 
-            // Column2
-            // 
-            this.Column2.DataPropertyName = "BirimFiyat";
-            this.Column2.HeaderText = "Birim Fiyatı";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
             // 
             // btnDuzenle
             // 
@@ -172,6 +172,7 @@ namespace BilgeKafe.UI
             this.Controls.Add(this.txtUrunAd);
             this.MinimumSize = new System.Drawing.Size(470, 39);
             this.Name = "UrunlerForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Ürünler";
             ((System.ComponentModel.ISupportInitialize)(this.dgwUrunler)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBirimFiyat)).EndInit();
