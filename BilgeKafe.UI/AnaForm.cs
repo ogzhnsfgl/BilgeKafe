@@ -85,6 +85,7 @@ namespace BilgeKafe.UI
                 db.AktifSiparisler.Add(siparis);
             }
             SiparisForm formSiparis = new SiparisForm(db, siparis);
+            formSiparis.MasaTasindi += FormSiparis_MasaTasindi;
             
             //Sipariş formunu açtık
             formSiparis.ShowDialog();
@@ -95,6 +96,17 @@ namespace BilgeKafe.UI
             if (siparis.Durum!=SiparisDurum.Aktif)
             {
                 lvi.ImageKey = "bos";
+            }
+        }
+
+        private void FormSiparis_MasaTasindi(object sender, MasaTasindiEventArgs e)
+        {
+            foreach (ListViewItem lvi in lvwMasalar.Items)
+            {
+                if ((int) lvi.Tag == e.EskiMasaNo)
+                    lvi.ImageKey = "bos";
+                if ((int)lvi.Tag == e.YeniMasaNo)
+                    lvi.ImageKey = "dolu";
             }
         }
 
