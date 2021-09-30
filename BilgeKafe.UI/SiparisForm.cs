@@ -23,7 +23,7 @@ namespace BilgeKafe.UI
             this.db = db;
             this.siparis = siparis;
             //Binding listi siparis detay listesine bağladık 
-            blSiparisDetay = new BindingList<SiparisDetay>(siparis.SiparisDetaylar);
+            blSiparisDetay = new BindingList<SiparisDetay>(siparis.SiparisDetaylar.ToList());
             blSiparisDetay.ListChanged += BlSiparisDetay_ListChanged;
             InitializeComponent();
             //Otomatik sütun oluşturmayı kapat:
@@ -39,16 +39,8 @@ namespace BilgeKafe.UI
         {
             cboMasaNo.DataSource = Enumerable
                 .Range(1, db.MasaAdet)
-                .Where(i => db.AktifSiparisler.All(s => s.MasaNo != i))
+                .Where(i => db.Siparisler.All(s => s.MasaNo != i && s.Durum==SiparisDurum.Aktif))
                 .ToList();
-
-            //for (int i = 1; i <= db.MasaAdet; i++)
-            //{
-            //    if (!db.AktifSiparisler.Any(s => s.MasaNo == i))
-            //    {
-            //        cboMasaNo.Items.Add(i);
-            //    }
-            //}
         }
 
         //Binding list'te her değişikli kolduğunda odemetutarını güncelleyecek!
@@ -64,7 +56,7 @@ namespace BilgeKafe.UI
 
         private void UrunleriListele()
         {
-            cboUrun.DataSource = db.Urunler;
+            cboUrun.DataSource = db.Urunler.ToList();
         }
 
         private void MasaNoyuGuncelle()
@@ -88,12 +80,15 @@ namespace BilgeKafe.UI
             {
                 UrunAd = urun.UrunAd,
                 Adet = adet,
-                BirimFiyat = urun.BirimFiyat
+                BirimFiyat = urun.BirimFiyat,
+                UrunId = urun.Id
             };
             //bl'ye eklemek hem sipariş detay listesine hem dgw ye ekleyecek!
+            siparis.SiparisDetaylar.Add(sd);
+            db.SaveChanges();
             blSiparisDetay.Add(sd);
             //Ödeme tutarı güncellenecek binding list event'ına atadık.
-            
+
         }
 
         private void btnAnasayfa_Click(object sender, EventArgs e)
@@ -134,8 +129,7 @@ namespace BilgeKafe.UI
             siparis.OdenenTutar = durum == SiparisDurum.Odendi ? siparis.ToplamTutar() : 0;
             siparis.Durum = durum;
             siparis.KapanisZamani = DateTime.Now;
-            db.AktifSiparisler.Remove(siparis);
-            db.GecmisSiparisler.Add(siparis);
+            db.SaveChanges();
             Close();
         }
 
@@ -144,11 +138,19 @@ namespace BilgeKafe.UI
             int yeniMasaNo = Convert.ToInt32(cboMasaNo.SelectedItem);
             int eskiMasaNo = siparis.MasaNo;
             siparis.MasaNo = yeniMasaNo;
+            db.SaveChanges();
             MasaNoyuGuncelle();
             MasaNolariListele();
 
             if (MasaTasindi != null)
                 MasaTasindi(this, new MasaTasindiEventArgs() {EskiMasaNo = eskiMasaNo, YeniMasaNo = yeniMasaNo});
+        }
+
+        private void dgwSiparisDetayları_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            SiparisDetay sd = (SiparisDetay) e.Row.DataBoundItem;
+            db.SiparisDetaylar.Remove(sd);
+            db.SaveChanges();
         }
     }
 }

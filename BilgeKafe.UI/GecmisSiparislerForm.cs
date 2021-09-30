@@ -18,17 +18,13 @@ namespace BilgeKafe.UI
         public GecmisSiparislerForm(KafeVeri db)
         {
             this.db = db;
-            
+
             InitializeComponent();
             dgwSiparisDetaylar.AutoGenerateColumns = false;
             dgwSiparisler.AutoGenerateColumns = false;
-            dgwSiparisler.DataSource = db.GecmisSiparisler;
-            
+            dgwSiparisler.DataSource = db.Siparisler.Where(x => x.Durum != SiparisDurum.Aktif).ToList();
+
         }
-
-
-    
-
 
         private void dgwSiparisler_SelectionChanged(object sender, EventArgs e)
         {
@@ -39,8 +35,8 @@ namespace BilgeKafe.UI
             else
             {
                 DataGridViewRow satir = dgwSiparisler.SelectedRows[0];
-                Siparis siparis = (Siparis) satir.DataBoundItem;
-                dgwSiparisDetaylar.DataSource = siparis.SiparisDetaylar;
+                Siparis siparis = (Siparis)satir.DataBoundItem;
+                dgwSiparisDetaylar.DataSource = siparis.SiparisDetaylar.ToList();
             }
         }
     }

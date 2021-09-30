@@ -19,31 +19,11 @@ namespace BilgeKafe.UI
         private KafeVeri db = new KafeVeri();
         public AnaForm()
         {
-            VerileriOku();
-
-            //OrnekUrunleriOlustur();
             InitializeComponent();
             MasalariOlustur();
         }
 
-        private void VerileriOku()
-        {
-            try
-            {
-                string jsonDb = File.ReadAllText("db.json");
-                db = JsonConvert.DeserializeObject<KafeVeri>(jsonDb);
-            }
-            catch (Exception e)
-            {
-               
-            }
-        }
 
-        //private void OrnekUrunleriOlustur()
-        //{
-        //    db.Urunler.Add(new Urun(){UrunAd = "Kola",BirimFiyat = 5.99m} );
-        //    db.Urunler.Add(new Urun(){UrunAd = "Çay",BirimFiyat = 3.50m} );
-        //}
 
         private void MasalariOlustur()
         {
@@ -58,7 +38,7 @@ namespace BilgeKafe.UI
             for (int i = 1; i <= db.MasaAdet; i++)
             {
                 ListViewItem lvi = new ListViewItem($"Masa {i}");
-                lvi.ImageKey = db.AktifSiparisler.Any(s => s.MasaNo == i) ? "dolu" : "bos";
+                lvi.ImageKey = db.Siparisler.Any(s => s.MasaNo == i && s.Durum == SiparisDurum.Aktif) ? "dolu" : "bos";
                 lvi.Tag = i; //Sonra tıklarken hangi masaya tıklandığını anlamak için koyduk.
                 lvwMasalar.Items.Add(lvi);
             }
@@ -74,15 +54,15 @@ namespace BilgeKafe.UI
             // Tıklanan masaya ait varsa siparişi bul
             // Aktif sipariş var mı kontrol ettik eğer yoksa null dönecek.
 
-            Siparis siparis= db.AktifSiparisler.FirstOrDefault(x => x.MasaNo == masaNo);
+            Siparis siparis= db.Siparisler.FirstOrDefault(x => x.MasaNo == masaNo && x.Durum==SiparisDurum.Aktif);
 
             // Eğer sipariş henüz oluşturulmadıysa yani masa kapalıysa yeni sipariş oluştur
 
             if (siparis==null)
             {
                 siparis = new Siparis()
-                    { MasaNo = masaNo };
-                db.AktifSiparisler.Add(siparis);
+                    { MasaNo = masaNo,Durum = SiparisDurum.Aktif};
+                db.Siparisler.Add(siparis);
             }
             SiparisForm formSiparis = new SiparisForm(db, siparis);
             formSiparis.MasaTasindi += FormSiparis_MasaTasindi;
@@ -120,11 +100,5 @@ namespace BilgeKafe.UI
             new UrunlerForm(db).ShowDialog();
         }
 
-        private void AnaForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            string dbJson = JsonConvert.SerializeObject(db);
-            File.WriteAllText("db.json",dbJson);
-
-        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -18,8 +19,8 @@ namespace BilgeKafe.UI
 
         public UrunlerForm(KafeVeri db)
         {
-            blUrunler = new BindingList<Urun>(db.Urunler);
             this.db = db;
+            blUrunler = new BindingList<Urun>(db.Urunler.ToList());
             InitializeComponent();
             UrunleriListele();
         }
@@ -41,9 +42,9 @@ namespace BilgeKafe.UI
             }
             if (btnUrunEkle.Text == "Ekle")
             {
-
                 Urun urun = new Urun() { UrunAd = txtUrunAd.Text, BirimFiyat = nudBirimFiyat.Value };
                 blUrunler.Add(urun);
+                db.Urunler.Add(urun);
 
             }
             else
@@ -55,6 +56,7 @@ namespace BilgeKafe.UI
                 blUrunler.ResetBindings();
             }
 
+            db.SaveChanges();
             FormuTemizle();
 
         }
@@ -63,7 +65,15 @@ namespace BilgeKafe.UI
         {
             DialogResult dr = MessageBox.Show("Ürünü silmek istediğinizden emin misiniz?", "Silme Onayı", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
 
-            e.Cancel = dr == DialogResult.No;
+            if (dr == DialogResult.No)
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            Urun urun = (Urun) e.Row.DataBoundItem;
+            db.Urunler.Remove(urun);
+            db.SaveChanges();
 
 
         }
